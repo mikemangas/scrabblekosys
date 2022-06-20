@@ -1,35 +1,39 @@
 import React, {useState} from 'react';
 import {StyleSheet, Button, View, Text, TextInput} from 'react-native';
 import Toast from 'react-native-toast-message';
-import {scrabbleArray} from './data/scrabbleArray';
+import {scrabbleArray} from '../data/scrabbleArray';
 const lettersOnlyRegex = /^[a-zA-Z]*$/;
 
 export default function Home() {
   const [word, setWord] = useState('');
-  const wordArray = word ? word.split('') : [];
-  const numberArray = [];
+  const splitWord = word ? word.split('') : [];
   const [list, setList] = useState([]);
-  let cumulatedScore = 0;
-  let listScore = 0;
 
-  wordArray.length > 0 &&
-    wordArray.forEach(singleLetter => {
-      scrabbleArray.forEach(object => {
-        if (object.letter === singleLetter.toUpperCase()) {
-          numberArray.push(object.number);
-        }
-      });
-    });
+  function accumulateScore(arr, isList, scrabbleMap) {
+    if (scrabbleMap) {
+      const numArray = [];
+      arr.length > 0 &&
+        arr.forEach(singleLetter => {
+          scrabbleMap.forEach(object => {
+            if (object.letter === singleLetter.toUpperCase()) {
+              numArray.push(object.number);
+            }
+          });
+        });
+      return numArray;
+    } else {
+      let value = 0;
+      arr.length > 0 &&
+        arr.forEach(el => {
+          value += isList ? el.number : el;
+        });
+      return value;
+    }
+  }
 
-  numberArray.length > 0 &&
-    numberArray.forEach(el => {
-      cumulatedScore += el;
-    });
-
-  list.length > 0 &&
-    list.forEach(el => {
-      listScore += el.number;
-    });
+  const numbers = accumulateScore(splitWord, false, scrabbleArray);
+  const cumulatedScore = accumulateScore(numbers, false, false);
+  const listScore = accumulateScore(list, true, false);
 
   function createWord(value) {
     if (lettersOnlyRegex.test(value)) {
@@ -80,12 +84,7 @@ export default function Home() {
             })}
           </View>
           <Text>Total Score: {cumulatedScore + listScore}</Text>
-          <Button
-            onPress={clearList}
-            title="Clear List"
-            color="#841584"
-            accessibilityLabel="Learn more about this purple button"
-          />
+          <Button onPress={clearList} title="Clear List" color="#841584" />
         </View>
       )}
     </View>
