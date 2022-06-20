@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, Button, View, TextInput} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {scrabbleArray} from '../data/scrabbleArray';
-const lettersOnlyRegex = /^[a-zA-Z]*$/;
 import CustomText from './CustomText';
 
 export default function Home() {
+  const lettersOnlyRegex = /^[a-zA-Z]*$/;
   const [word, setWord] = useState('');
   const splitWord = word ? word.split('') : [];
   const [list, setList] = useState([]);
