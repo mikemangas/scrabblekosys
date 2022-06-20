@@ -1,16 +1,14 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, StatusBar, Text} from 'react-native';
+import {StatusBar, ScrollView} from 'react-native';
 import Home from './src/components/Home';
 import Toast from 'react-native-toast-message';
 
 export default function App() {
   return (
-    <View>
+    <ScrollView>
       <StatusBar />
       <Home />
       <Toast />
-    </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({});

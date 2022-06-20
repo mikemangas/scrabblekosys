@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import {StyleSheet, Button, View, Text, TextInput} from 'react-native';
+import {StyleSheet, Button, View, TextInput} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {scrabbleArray} from '../data/scrabbleArray';
 const lettersOnlyRegex = /^[a-zA-Z]*$/;
+import CustomText from './CustomText';
 
 export default function Home() {
   const [word, setWord] = useState('');
@@ -40,19 +41,21 @@ export default function Home() {
       setWord(value);
     } else {
       Toast.show({
-        visibilityTime: 800,
+        visibilityTime: 1500,
         type: 'info',
-        text1: 'Only letters allowed :-)',
+        text1: 'Only letters allowed',
       });
     }
   }
 
   function addToList(val) {
-    setList(el => [
-      ...el,
-      {word: val.nativeEvent.text, number: cumulatedScore},
-    ]);
-    setWord('');
+    if (val?.nativeEvent?.text) {
+      setList(el => [
+        ...el,
+        {word: val.nativeEvent.text, number: cumulatedScore},
+      ]);
+      setWord('');
+    }
   }
 
   function clearList() {
@@ -60,31 +63,42 @@ export default function Home() {
   }
 
   return (
-    <View>
-      <Text>Hi Kosys</Text>
+    <View style={styles.contentWrapper}>
+      <CustomText
+        style={[styles.center, styles.title]}
+        content="Scrabble App for Kosys"
+      />
       <TextInput
-        style={styles.input}
+        style={[styles.border, styles.textInput]}
         onChangeText={value => createWord(value)}
         value={word}
         onSubmitEditing={val => addToList(val)}
       />
-      <Text>Accumulated Score: {cumulatedScore} </Text>
+      <CustomText
+        style={styles.title}
+        content={`Accumulated Score: ${cumulatedScore}`}
+      />
       {list && list.length > 0 && (
         <View>
-          <View style={styles.list}>
-            <Text style={styles.title}>My List</Text>
+          <View style={styles.border}>
+            <View style={[styles.lineWrapper, styles.listTitleWrapper]}>
+              <CustomText content="Score" style={styles.title} />
+              <CustomText content="Word" style={styles.title} />
+            </View>
             {list.map((el, index) => {
               return (
-                <View key={index}>
-                  <Text>
-                    Wort: {el.word} | Score: {el.number}
-                  </Text>
+                <View style={styles.lineWrapper} key={index}>
+                  <CustomText content={el.word} />
+                  <CustomText content={el.number} />
                 </View>
               );
             })}
           </View>
-          <Text>Total Score: {cumulatedScore + listScore}</Text>
-          <Button onPress={clearList} title="Clear List" color="#841584" />
+          <CustomText
+            content={`Total Score: ${cumulatedScore + listScore}`}
+            style={styles.title}
+          />
+          <Button onPress={clearList} title="Clear List" color="#EB5D49" />
         </View>
       )}
     </View>
@@ -92,18 +106,37 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  input: {
-    borderColor: 'black',
-    borderWidth: 3,
-    margin: 10,
-  },
-  list: {
-    borderColor: 'black',
-    borderWidth: 3,
-    margin: 10,
-  },
   title: {
-    fontSize: 30,
-    color: 'blue',
+    fontWeight: '600',
+  },
+  center: {
+    alignSelf: 'center',
+  },
+  contentWrapper: {
+    padding: 10,
+  },
+  border: {
+    borderColor: '#EB5D49',
+    borderWidth: 3,
+  },
+  textInput: {
+    padding: 10,
+    color: 'black',
+    fontSize: 16,
+  },
+
+  lineWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    alignItems: 'center',
+    borderBottomColor: '#EB5D49',
+    borderBottomWidth: 1,
+  },
+  listTitleWrapper: {
+    borderBottomColor: 'black',
+    borderBottomWidth: 3,
+    paddingBottom: 10,
+    paddingTop: 10,
   },
 });
