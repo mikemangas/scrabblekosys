@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, Button, View, TextInput} from 'react-native';
+import {StyleSheet, Text, Button, View, TextInput} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {scrabbleArray} from '../data/scrabbleArray';
 const lettersOnlyRegex = /^[a-zA-Z]*$/;
@@ -63,14 +63,16 @@ export default function Home() {
   }
 
   return (
-    <View style={styles.contentWrapper}>
+    <View style={styles.content}>
       <CustomText
         style={[styles.center, styles.title]}
         content="Scrabble App for Kosys"
       />
+      <Text>Type a Scrabble Word</Text>
       <TextInput
         style={[styles.border, styles.textInput]}
         onChangeText={value => createWord(value)}
+        placeholder={'e.g. Snake'}
         value={word}
         onSubmitEditing={val => addToList(val)}
       />
@@ -82,8 +84,8 @@ export default function Home() {
         <View>
           <View style={styles.border}>
             <View style={[styles.lineWrapper, styles.listTitleWrapper]}>
-              <CustomText content="Score" style={styles.title} />
               <CustomText content="Word" style={styles.title} />
+              <CustomText content="Score" style={styles.title} />
             </View>
             {list.map((el, index) => {
               return (
@@ -106,14 +108,14 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
+  content: {
+    marginBottom: 40,
+  },
   title: {
     fontWeight: '600',
   },
   center: {
     alignSelf: 'center',
-  },
-  contentWrapper: {
-    padding: 10,
   },
   border: {
     borderColor: '#EB5D49',
@@ -124,7 +126,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
   },
-
   lineWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',

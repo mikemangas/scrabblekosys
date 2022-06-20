@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {StyleSheet, Button, View, Text, TextInput} from 'react-native';
+import React from 'react';
+import {StyleSheet, Text} from 'react-native';
 
 export default function CustomText({content, style}) {
   return <Text style={[styles.text, style && style]}>{content}</Text>;
