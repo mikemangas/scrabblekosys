@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, Button, View, TextInput} from 'react-native';
+import {StyleSheet, Text, Button, View, TextInput, Alert} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {scrabbleArray} from '../data/scrabbleArray';
 import CustomText from './CustomText';
 
 export default function Home() {
-  const lettersOnlyRegex = /^[a-zA-Z]*$/;
   const [word, setWord] = useState('');
-  const splitWord = word ? word.split('') : [];
   const [list, setList] = useState([]);
+  const lettersOnlyRegex = /^[a-zA-Z]*$/;
+  const splitWord = word ? word.split('') : [];
 
   function accumulateScore(arr, isList, scrabbleMap) {
     if (scrabbleMap) {
@@ -62,6 +62,17 @@ export default function Home() {
     setList([]);
   }
 
+  function showAlertClearList() {
+    return Alert.alert(
+      'Hey :-)',
+      'Are you sure, you want to delete your history?',
+      [
+        {text: 'No', onPress: () => console.log('NO')},
+        {text: 'Yes', onPress: () => clearList()},
+      ],
+    );
+  }
+
   return (
     <View style={styles.content}>
       <CustomText
@@ -100,7 +111,11 @@ export default function Home() {
             content={`Total Score: ${cumulatedScore + listScore}`}
             style={styles.title}
           />
-          <Button onPress={clearList} title="Clear List" color="#EB5D49" />
+          <Button
+            onPress={showAlertClearList}
+            title="Clear List"
+            color="#EB5D49"
+          />
         </View>
       )}
     </View>
